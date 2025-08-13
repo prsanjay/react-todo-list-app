@@ -1,30 +1,26 @@
-import { useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import Header from './components/Header';
+import ToDoInput from './components/ToDoInput';
+import ToDoListTable from './components/ToDoListTable';
 
 function App() {
-  const [items, setItems] = useState([])
+  const [todos, setToDos] = useState([])
+
+  useEffect(() => {
+    const storedToDos = localStorage.getItem('todos');
+    if (storedToDos) {
+      setToDos(JSON.parse(storedToDos));
+    }
+  }, [])
 
   return (
     <>
-      <div>
-        <h1>My To-Do List</h1>
-      </div>
-      <div>
-        <input type="text" placeholder="Add a new task" />
-        <button>Add Task</button>
-      </div>
-      <div>
-        <ul>
-         <li>Task - 1</li>
-         <li>Task - 2</li>
-         <li>Task - 3</li>
-        </ul>
-      </div>
+      <Header />
+      <ToDoInput setToDos={setToDos} todos={todos} />
+      { todos && todos.length > 0 ? <ToDoListTable todos={todos} setToDos={setToDos} /> : "No ToDo Items!" }
     </>
   )
 }
 
-export default App
-
-
-// 1. Initially we need to get the data from localstorage
+export default App;
